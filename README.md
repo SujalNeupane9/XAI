@@ -47,12 +47,36 @@ Jupyter notebooks for data analysis, feature engineering, and model evaluation:
 - **Multiple Datasets**: Training and evaluation on COLING 2025 and PAN CLEF datasets
 - **Ensemble Methods**: Weighted averaging of best-performing models
 
-## Usage
+## Weighted Average Ensemble Method
 
-Run the notebooks in the `/notebook` directory to:
-1. Analyze data and create features
-2. Train models on optimal feature sets
-3. Evaluate model performance
-4. Create ensemble predictions
+The `oof-and-ensemble-of-best-performing-models.ipynb` notebook implements an advanced ensemble technique that combines predictions from multiple models trained on different datasets:
 
-Pre-trained models are available in the `/models` directory for direct inference.
+### How It Works:
+
+1. **Multi-Dataset Training**: Best-performing models are trained on three different datasets:
+   - **COLING Dataset**: Uses Random Forest (best model for COLING)
+   - **PAN CLEF Dataset**: Uses XGBoost (best model for PAN CLEF)
+   - Models are trained on engineered features (30 features including character count, word count, sentiment, grammar errors, etc.)
+
+2. **Out-of-Fold (OOF) Predictions**: 
+   - Uses 5-fold cross-validation during training
+   - Captures prediction probabilities for both classes from each fold
+   - Generates both validation predictions and test predictions for all models
+
+3. **Probability Stacking**:
+   - Combines probability predictions from models trained on different datasets
+   - Creates feature matrices with probabilities from both COLING and PAN CLEF trained models
+   - This creates a meta-learning approach where models learn from each other's outputs
+
+4. **Ridge Regression Weighting**:
+   - Applies Ridge regression to learn optimal weights for combining ensemble predictions
+   - Trains on a subset of probability predictions
+   - Automatically learns which model/dataset combination contributes most to final predictions
+   - Uses the learned weights to generate final predictions by threshold (0.5)
+
+### Results:
+- Tests the ensemble on multiple data sources (Ghostbuster Wikipedia, Reuters, Essays)
+- Evaluates performance using F1 score metrics
+- Compares cross-validation performance across multiple datasets
+
+This approach leverages the strengths of each model while using Ridge regression to find the optimal weighted combination, resulting in improved generalization performance.
