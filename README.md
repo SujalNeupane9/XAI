@@ -11,7 +11,7 @@ Contains datasets used for training and evaluation:
   - `coling_test3000.csv` - Test dataset with 3000 samples
 - **PAN CLEF/**: PAN CLEF challenge dataset
   - `test.csv` - Test dataset
-- **new model responses/**: Additional data
+- **new model responses/**: Additional data for evaluating AI models
   - `new_data.csv` - New model responses data
 
 ### `/models`
